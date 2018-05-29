@@ -1,0 +1,54 @@
+{
+  "name": "single-select",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.4.0",
+    "lodash": "^4.17.5",
+    "react-dom": "^16.4.0",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "export PORT=4000; react-scripts start",
+    "build": "react-scripts build",
+    "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js \"test/*@(.js|.jsx)\" --watch --watch-extensions jsx",
+    "testd": "mocha --inspect-brk --compilers js:babel-core/register --require ./test/test_helper.js \"test/*@(.js|.jsx)\" --watch --watch-extensions jsx",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "chai": "^4.1.2",
+    "chai-enzyme": "1.0.0-beta.0",
+    "deep-freeze": "0.0.1",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "history": "^4.7.2",
+    "mocha": "^5.0.1",
+    "react-dom": "^16.2.0",
+    "react-router-config": "^1.0.0-beta.4",
+    "react-test-renderer": "^16.2.0",
+    "sinon": "^4.3.0",
+    "webpack": "^3.6.0"
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:3000",
+      "ws": false
+    },
+    "/auth/google_oauth2": {
+      "target": "http://localhost:3000",
+      "ws": false
+    },
+    "/auth/google_oauth2/callback": {
+      "target": "http://localhost:3000",
+      "ws": false
+    },
+    "/backend": {
+      "target": "http://localhost:3000",
+      "ws": false
+    }
+  }
+}
