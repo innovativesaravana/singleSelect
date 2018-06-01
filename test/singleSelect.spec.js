@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import SingleSelect from '../src/singleSelect';
 import sinon from 'sinon';
+import _ from 'lodash';
 
 //
 // Step 1 (single select with array of strings)
@@ -97,5 +98,20 @@ import sinon from 'sinon';
       let options = wrapper.find('ul>li>label').map((op)=> op.text());
       expect(options).to.deep.equal(['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola']);
     });
+
+    it('should options scrollable' , () => {
+      expect(wrapper.find('div.scrollContainer')).to.have.length(1);
+    });
+
+    it('should have dropsdown button' , () => {
+      expect(wrapper.find('button.firstButton')).to.have.length(1);
+    });
+
+    it('should save selected value on state' , () => {
+      wrapper.setState({options: ['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola']})
+      let option = wrapper.find('li').filterWhere(n => n.text() == 'Lily');
+      option.simulate("click");
+      expect(wrapper.state().selectedOption).to.eq('Lily');
+    }); 
   }
   )
