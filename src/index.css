@@ -6,8 +6,14 @@ body {
 
 li {
   list-style: none;
+  padding: 0;
+  width: 116px;
+  margin-left: -40px;
   display: block;
+  text-align: left;
+  border-radius: 5px;
 }
+
 
 .scrollContainer{
   max-height: 270px;
@@ -16,15 +22,45 @@ li {
   clear: both;
 }
 
+.dropdownContainer {
+  position: relative;
+  width: 110px;
+  border-radius: 5px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+label{
+  margin-left: 10px;
+}
+
+span {
+  float:right;
+  margin-right: 10px;
+  font-size: 13px;
+  color: black;
+}
+
 .firstButton {
-  width: 100px;
-  height: 15px;
+  margin-left: 40%;
+  margin-top: 30px;
+  width: 110px;
+  /* color: blue; */
+  height: 20px;
   font-size: 14px;
-  cursor: pointer;
+  text-align: left;
+  border-style: solid;
+  border-color: black;
+  border-width: 2px;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+
+.firstButton:focus{
+  outline-color: skyblue
 }
 
 li:focus,
-li:hover{
+li.active{
   background-color: #b4b4b4;
   color: #fff;
 }
