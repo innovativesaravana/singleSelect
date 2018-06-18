@@ -81,8 +81,7 @@ describe('general features', () => {
   });
 
   it('should display given options name' , () => {
-    wrapper.setState({options: ['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola']})
-    let options = wrapper.find('ul>li>label').map((op)=> op.text());
+    let options = wrapper.find('li>label').map((op)=> op.text());
     expect(options).to.deep.equal(['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola']);
   });
 
@@ -91,6 +90,13 @@ describe('general features', () => {
     let option = wrapper.find('li').filterWhere(n => n.text() == 'Lily');
     option.simulate("click");
     expect(wrapper.state().selectedOption).to.eq('Lily');
+  });
+
+  it('should display selected options on button' , () => {
+    wrapper.setState({options: ['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola']})
+    let option = wrapper.find('li').filterWhere(n => n.text() == 'Lily');
+    option.simulate("click");
+    expect(wrapper.find(".firstButton").text()).to.eq('Lily▾');
   });
 });
 
@@ -188,6 +194,26 @@ describe('Keyboard functionalities', () => {
     wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
     expect(wrapper.find('li.active').text()).to.eq('Carola');
   });
+});
+
+describe('filter functionalities', () => {
+  let values = ['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola'];
+  let wrapper = mount(<SingleSelect values={values} />);
+
+  it('should filter work properly' , () => {
+    let inputBox = wrapper.find('input.searchBox');
+    inputBox.simulate("change", { target: { value: "Ann" } });
+    let options = wrapper.find('li>label').map((op)=> op.text());
+    expect(options).to.deep.equal(['Annalee','Annetta']);
+  });
+
+  it('filter works for lowercase' , () => {
+    let inputBox = wrapper.find('input.searchBox');
+    inputBox.simulate("change", { target: { value: "le" } });
+    let options = wrapper.find('li>label').map((op)=> op.text());
+    expect(options).to.deep.equal(['Annalee','Lenita']);
+  });
+
 });
 
   // describe('Header', () => {
