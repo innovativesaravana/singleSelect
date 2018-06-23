@@ -20,7 +20,21 @@ export default class SingleSelect extends Component {
 
   constructor(props) {
     super(props);
-    let options = props.values;
+    var options = [];
+    let data = props.values;
+    var isGrouped = false;
+    var groupNames = [];
+    if(typeof(_.first(data)) === "string") {
+      var options = data;
+    } else if (typeof(_.first(data)) === "object") {
+      var options = _.map(data, 'name');
+      var groupNames = _.uniq(_.map(data, 'group'));
+      if((groupNames.length === 1 ) && (groupNames[0])) {
+        var isGrouped = true;
+      }
+    }
+
+
     this.state = {
       options: options,
       filteredOptions: options,
