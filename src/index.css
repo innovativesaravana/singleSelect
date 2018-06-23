@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  display: block;
   font-family: sans-serif;
   background-color: skyblue;
 }
@@ -8,8 +9,9 @@ body {
 li {
   list-style: none;
   padding: 0;
-  width: 150px;
-  margin-left: -40px;
+  cursor: pointer;
+  width: 160px;
+  margin-left: -35px;
   display: block;
   text-align: left;
   border-radius: 5px;
@@ -25,26 +27,38 @@ li {
 
 .dropdownContainer {
   background-color: white;
+  margin-top: 5px;
   position: relative;
-  width: 180px;
+  width: 172px;
   border-radius: 5px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
+
+.searchBox:focus {
+  outline-color: transparent;
+}
+
 .searchBox {
-  width: 130px;
+  margin-top: 1px;
+  width: 127px;
   border-color: transparent;
-  margin-top: 10px;
 }
 
 .search {
-  display: inline-block;
-  position: relative;
-  overflow: hidden;
+  margin-left: 5px;
+  width: 160px;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  margin-top: 8px;
+  display: black;
+  border-radius: 2px;
 }
 
 .searchIcon {
-  margin-top: 12px;
+  float: right;
+  margin-top: 4px;
   cursor: pointer;
 }
 
@@ -55,21 +69,29 @@ label{
 span {
   float:right;
   margin-right: 10px;
+  margin-top: 2.5px;
   font-size: 13px;
   color: black;
+}
+
+.buttonLabel {
+  font-style: italic;
+  margin-left: 5px;
+  display: inline-grid;
+  margin-top: 2px;
 }
 
 .firstButton {
   margin-left: 40%;
   margin-top: 30px;
-  width: 110px;
+  width: 130px;
   /* color: blue; */
   height: 20px;
   font-size: 14px;
   text-align: left;
   border-style: solid;
   border-color: black;
-  border-width: 2px;
+  border-width: 0.5px;
   border-radius: 4px;
   background-color: #f5f5f5;
   cursor: pointer;

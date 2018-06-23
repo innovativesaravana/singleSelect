@@ -9,7 +9,7 @@ export const Option =(props) => {
       onClick={() => props.obj.optionClicked(props.option)}
       key={props.option}
     >
-      <label>
+      <label className="optionLabel">
         {props.option}
       </label>
     </li>
@@ -24,8 +24,9 @@ export default class SingleSelect extends Component {
     this.state = {
       options: options,
       filteredOptions: options,
-      dropdownOpacity: 0,
       isVisible: false,
+      indictor: '\u25BC',
+      displayProp: 'none',
       currentOptionIndex: 0,
       selectedOption: "Select a name"
     };
@@ -47,7 +48,7 @@ export default class SingleSelect extends Component {
         this.hideDropdown()
         }
       } else {
-        if (this.refs["list"].contains(e.target)) {
+        if (this.refs["list"].contains(e.target)||this.refs["optionLabel"].contains(e.target)) {
           this.showDropdown()
         } else {
           this.hideDropdown()
@@ -57,14 +58,16 @@ export default class SingleSelect extends Component {
 
    showDropdown = (e) => {
      this.setState({
-       dropdownOpacity: 100,
+       displayProp: 'block',
+       indictor: '\u25B2',
        isVisible: true,
      });
    }
 
    hideDropdown = (e) => {
      this.setState({
-       dropdownOpacity: 0,
+       displayProp: 'none',
+       indictor: '\u25BC',
        isVisible: false,
      });
    }
@@ -73,6 +76,7 @@ export default class SingleSelect extends Component {
      this.setState({
        selectedOption: option
      });
+     this.hideDropdown()
    }
 
    optionHover = (option) => {
@@ -101,7 +105,6 @@ export default class SingleSelect extends Component {
      let options_length = options.length
      let isVisible = this.state.isVisible
      let currentOptionIndex = this.state.currentOptionIndex;
-     // this.showDropdown()
      if(e.key === "ArrowDown") {
        if(!isVisible) {
         this.showDropdown()
@@ -110,7 +113,6 @@ export default class SingleSelect extends Component {
         this.setState({
           currentOptionIndex:  index
         });
-        // changeIndex
       }
     } else if (e.key === "ArrowUp") {
       if(!isVisible) {
@@ -120,13 +122,11 @@ export default class SingleSelect extends Component {
        this.setState({
          currentOptionIndex: index
        });
-       // changeIndex
      }
    } else if (e.key === " ") {
      if(!isVisible) {
       return null;
     } else {
-      // selectcurrentoption
       this.setState({
         selectedOption: options[currentOptionIndex]
       });
@@ -135,7 +135,6 @@ export default class SingleSelect extends Component {
     if(!isVisible) {
      this.showDropdown()
    } else {
-     // selectcurrentoption
      this.setState({
        selectedOption: options[currentOptionIndex]
      });
@@ -151,16 +150,17 @@ export default class SingleSelect extends Component {
        <div className="firstButton"
          tabIndex="0"
          onKeyDown={this.keyDownPressed}
-         ref={"dropdownContainer"}>{this.state.selectedOption}
-         <span className="indicator">&#9662;</span>
+         ref={"dropdownContainer"}>
+         <lablel className="buttonLabel">{this.state.selectedOption}</lablel>
+         <span className="indicator">{this.state.indictor}</span>
          </div>
 
-       <div className="dropdownContainer" style={{'width': 'auto', 'position': 'absolute', 'left': '40%', 'top': '119', 'display': 'block', 'opacity':this.state.dropdownOpacity}}>
+       <div className="dropdownContainer" style={{'position': 'absolute', 'left': '40%', 'top': '119', 'display': this.state.displayProp}}>
          <div className="search" ref={"list"}>
-           <input className="searchBox" autoFocus="autofocus" onKeyDown={this.keyDownPressed} placeholder="Find Users/Graphs..." onChange={this.handleInputTextChange}></input>
+           <input className="searchBox" autoFocus="autofocus" onKeyDown={this.keyDownPressed} placeholder="Find Users/Groups..." onChange={this.handleInputTextChange}></input>
            <span className="searchIcon">&#128269;</span>
          </div>
-         <ul className="list">
+         <ul className="list" ref={"optionLabel"}>
            {
              _.map(this.state.filteredOptions, option => {
                let options = this.state.filteredOptions

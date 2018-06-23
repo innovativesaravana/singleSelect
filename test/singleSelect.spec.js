@@ -75,7 +75,7 @@ describe('general features', () => {
 
   it('Clicking dropdown button shows a dropdown container' , () => {
     let dropdownContainer = wrapper.find('div.dropdownContainer');
-    expect(dropdownContainer.prop('style').opacity).to.eq(0);
+    // expect(dropdownContainer.prop('style').opacity).to.eq(0);
     wrapper.find('.firstButton').simulate('click');
     // expect(dropdownContainer.prop('style').opacity).to.eq(100);
   });
@@ -96,7 +96,7 @@ describe('general features', () => {
     wrapper.setState({options: ['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola']})
     let option = wrapper.find('li').filterWhere(n => n.text() == 'Lily');
     option.simulate("click");
-    expect(wrapper.find(".firstButton").text()).to.eq('Lily▾');
+    expect(wrapper.find(".firstButton lablel").text()).to.eq('Lily');
   });
 });
 
@@ -215,60 +215,3 @@ describe('filter functionalities', () => {
   });
 
 });
-
-  // describe('Header', () => {
-  //
-  //   let wrapper = shallow(
-  //     <SingleSelect />
-  //   );
-  //
-  //   it('should return a dropdown container' , () => {
-  //     expect(wrapper.find('div.dropdown')).to.have.length(1);
-  //   });
-  //
-  //   // it('should have a search box' , () => {
-  //   //   expect(wrapper.find('input.searchBox')).to.have.length(1);
-  //   // });
-  //
-  //   // it('should display correct text on searchbox' , () => {
-  //   //   expect(wrapper.find('input.searchBox').prop('placeholder')).to .eq("Find Users/Graphs...")
-  //   // });
-  //
-  //   // it('should display search icon on inputbox' , () => {
-  //   //   expect(wrapper.find('span.searchIcon').text()).to.eq('🔍')
-  //   // });
-  //
-  //   // it('should auto focuse on searchbox' , () => {
-  //   //   expect(wrapper.find('input.searchBox').prop('autofocus')).to .eq("autofocus")
-  //   // });
-  //
-  //   it('should have a ul list' , () => {
-  //     expect(wrapper.find('ul')).to.have.length(1);
-  //   });
-  //
-  //   it('should display given options name' , () => {
-  //     wrapper.setState({options: ['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola']})
-  //     let options = wrapper.find('ul>li>label').map((op)=> op.text());
-  //     expect(options).to.deep.equal(['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola']);
-  //   });
-  //
-  //   it('should options scrollable' , () => {
-  //     expect(wrapper.find('div.scrollContainer')).to.have.length(1);
-  //   });
-  //
-  //   it('should have dropsdown button' , () => {
-  //     expect(wrapper.find('button.firstButton')).to.have.length(1);
-  //   });
-  //
-  //   it('should save selected value on state' , () => {
-  //     wrapper.setState({options: ['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola']})
-  //     let option = wrapper.find('li').filterWhere(n => n.text() == 'Lily');
-  //     option.simulate("click");
-  //     expect(wrapper.state().selectedOption).to.eq('Lily');
-  //   });
-  //
-  //   it('should show dropdown after button clicked' , () => {
-  //
-  //   });
-  // }
-  // )
