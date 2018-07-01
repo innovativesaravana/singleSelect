@@ -148,26 +148,12 @@ describe('Keyboard functionalities', () => {
     expect(wrapper.state().selectedOption).to.eq('Lily');
   });
 
-  it('pressing space over the option should select' , () => {
-    let wrapper = mount(<SingleSelect values={values} />);
-    wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
-    expect(wrapper.state().selectedOption).to.eq('Select a name'); // default text
-    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
-    expect(wrapper.find('li.active').text()).to.eq('Lily');
-    expect(wrapper.state().selectedOption).to.eq('Select a name'); // default text
-    wrapper.find(".firstButton").simulate("keyDown", { key: " " });
-    expect(wrapper.state().selectedOption).to.eq('Lily');
-  });
 
   it('selecting option should not close the dropdown' , () => {
     let wrapper = mount(<SingleSelect values={values} />);
     wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
     wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
     expect(wrapper.find('li.active').text()).to.eq('Lily');
-    wrapper.find(".firstButton").simulate("keyDown", { key: " " });
-    expect(wrapper.find('li.active').text()).to.eq('Lily');
-    expect(wrapper.state().selectedOption).to.eq('Lily');
-    expect(wrapper.state().isVisible).to.eq(true);
     wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
     expect(wrapper.find('li.active').text()).to.eq('Annalee');
     wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
@@ -292,26 +278,11 @@ describe('object input keyboard functionalities', () => {
     expect(wrapper.state().selectedOption).to.eq('Annalee');
   });
 
-  it('pressing space over the option should select' , () => {
-    let wrapper = mount(<SingleSelect values={values} />);
-    wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
-    expect(wrapper.state().selectedOption).to.eq('Select a name'); // default text
-    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
-    expect(wrapper.find('li.active').text()).to.eq('Annalee');
-    expect(wrapper.state().selectedOption).to.eq('Select a name'); // default text
-    wrapper.find(".firstButton").simulate("keyDown", { key: " " });
-    expect(wrapper.state().selectedOption).to.eq('Annalee');
-  });
-
   it('selecting option should not close the dropdown' , () => {
     let wrapper = mount(<SingleSelect values={values} />);
     wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
     wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
     expect(wrapper.find('li.active').text()).to.eq('Annalee');
-    wrapper.find(".firstButton").simulate("keyDown", { key: " " });
-    expect(wrapper.find('li.active').text()).to.eq('Annalee');
-    expect(wrapper.state().selectedOption).to.eq('Annalee');
-    expect(wrapper.state().isVisible).to.eq(true);
     wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
     expect(wrapper.find('li.active').text()).to.eq('Alonso');
     wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
@@ -369,12 +340,137 @@ describe('group functionalities', () => {
   let wrapper = mount(<SingleSelect values={values} />);
 
   it('should filter work properly' , () => {
+    let inputBox = wrapper.find('input.searchBox');
+    inputBox.simulate("change", { target: { value: "Annalee" } });
+    let options = wrapper.find('li>label').map((op)=> op.text());
+    expect(options).to.deep.equal(['Annalee']);
   });
 
   it('filter works for lowercase' , () => {
+    let inputBox = wrapper.find('input.searchBox');
+    inputBox.simulate("change", { target: { value: "le" } });
+    let options = wrapper.find('li>label').map((op)=> op.text());
+    expect(options).to.deep.equal(['Annalee']);
   });
 
 });
+
+describe('grouped input functionalities', () => {
+  let values = [{name: 'Lily', id: 1, group: 'suggestedUsers'}, {name: 'Annalee', id: 2, group: 'suggestedUsers'}, {name: 'Alonso', id: 3, group: 'suggestedUsers'},
+    {name: 'Howard', id: 4, group: 'suggestedGroups'}, {name: 'Rory', id: 5}, {name: 'Wilbert', id: 6, group: 'suggestedGroups'},
+    {name: 'Carola', id: 7, group: 'suggestedGroups'}, {name: 'Crazy', id: 8}, {name: 'Saro', id: 9, group: 'suggestedGroups'}];
+
+  let wrapper = mount(<SingleSelect values={values} />);
+
+  it('should show a dropdown button' , () => {
+      expect(wrapper.find('div.firstButton')).to.have.length(1);
+  });
+
+  it('should display given options name' , () => {
+    let options = wrapper.find('li>label').map((op)=> op.text());
+    expect(options).to.deep.equal(['Rory', 'Crazy', 'Howard', 'Wilbert', 'Carola', 'Saro', 'Lily', 'Annalee', 'Alonso']);
+  });
+
+  it('should save selected value on state' , () => {
+    let option = wrapper.find('li').filterWhere(n => n.text() == 'Lily');
+    option.simulate("click");
+    expect(wrapper.state().selectedOption).to.eq('Lily');
+  });
+
+  it('should display selected options on button' , () => {
+    let option = wrapper.find('li').filterWhere(n => n.text() == 'Lily');
+    option.simulate("click");
+    expect(wrapper.find(".firstButton lablel").text()).to.eq('Lily');
+  });
+
+});
+
+
+describe('group input keyboard functionalities', () => {
+  let values = [{name: 'Lily', id: 1, group: 'suggestedUsers'}, {name: 'Annalee', id: 2, group: 'suggestedUsers'}, {name: 'Alonso', id: 3, group: 'suggestedUsers'},
+    {name: 'Howard', id: 4, group: 'suggestedGroups'}, {name: 'Rory', id: 5}, {name: 'Wilbert', id: 6, group: 'suggestedGroups'},
+    {name: 'Carola', id: 7, group: 'suggestedGroups'}, {name: 'Crazy', id: 8}, {name: 'Saro', id: 9, group: 'suggestedGroups'}];
+
+  it('pressing enter should open the dropdown' , () => {
+    let wrapper = mount(<SingleSelect values={values} />);
+    expect(wrapper.state().isVisible).to.eq(false);
+    wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
+    expect(wrapper.state().isVisible).to.eq(true);
+  });
+
+  it('pressing downarrow should open the dropdown' , () => {
+    let wrapper = mount(<SingleSelect values={values} />);
+    expect(wrapper.state().isVisible).to.eq(false);
+    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
+    expect(wrapper.state().isVisible).to.eq(true);
+  });
+
+  it('pressing downarrow again should navigate down the option' , () => {
+    let wrapper = mount(<SingleSelect values={values} />);
+    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
+    expect(wrapper.find('li.active').text()).to.eq('Rory');
+    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
+    expect(wrapper.find('li.active').text()).to.eq('Crazy');
+    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
+    expect(wrapper.find('li.active').text()).to.eq('Howard');
+  });
+
+  it('pressing up again should navigate up the option' , () => {
+    let wrapper = mount(<SingleSelect values={values} />);
+    wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
+    expect(wrapper.find('li.active').text()).to.eq('Rory');
+    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
+    expect(wrapper.find('li.active').text()).to.eq('Crazy');
+    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowUp" });
+    expect(wrapper.find('li.active').text()).to.eq('Rory');
+  });
+
+  it('pressing enter over the option should select' , () => {
+    let wrapper = mount(<SingleSelect values={values} />);
+    wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
+    expect(wrapper.state().selectedOption).to.eq('Select a name'); // default text
+    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
+    expect(wrapper.find('li.active').text()).to.eq('Crazy');
+    expect(wrapper.state().selectedOption).to.eq('Select a name'); // default text
+    wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
+    expect(wrapper.state().selectedOption).to.eq('Crazy');
+  });
+
+  it('selecting option should not close the dropdown' , () => {
+    let wrapper = mount(<SingleSelect values={values} />);
+    wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
+    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
+    expect(wrapper.find('li.active').text()).to.eq('Crazy');
+    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
+    expect(wrapper.find('li.active').text()).to.eq('Howard');
+    wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
+    expect(wrapper.state().selectedOption).to.eq('Howard');
+    expect(wrapper.state().isVisible).to.eq(true);
+  });
+
+  it('pressing escape should close the dropdown' , () => {
+    let wrapper = mount(<SingleSelect values={values} />);
+    expect(wrapper.state().isVisible).to.eq(false);
+    wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
+    expect(wrapper.state().isVisible).to.eq(true);
+    wrapper.find(".firstButton").simulate("keyDown", { key: "Escape" });
+    expect(wrapper.state().isVisible).to.eq(false);
+  });
+
+  it('moving extreme down should keep last option active' , () => {
+    let wrapper = mount(<SingleSelect values={values} />);
+    wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
+    let options = wrapper.find('li label').map((op)=> op.text());
+    let lastIndex = _.findLastIndex(options)
+    wrapper.setState({currentOptionIndex: lastIndex})
+    expect(wrapper.find('li.active').text()).to.eq('Alonso');
+    wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
+    expect(wrapper.find('li.active').text()).to.eq('Alonso');
+  });
+
+});
+
+
 
 // update css
 // change display method

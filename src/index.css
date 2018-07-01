@@ -27,6 +27,7 @@ li {
 
 .dropdownContainer {
   background-color: white;
+  cursor: pointer;
   margin-top: 5px;
   position: relative;
   width: 172px;

@@ -1,10 +1,34 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 
+export const Group =(props) => {
+  return(
+    <div>
+    {
+      (props.name === "undefined") ? (
+        false
+      ) : (
+        <h5>{props.name}</h5>
+      )
+    }
+      <ul className="list">
+      {
+        _.map(_.map(props.values, 'name'), option => {
+          return <Option option={option} obj={props.obj}/>;
+        })
+      }
+      </ul>
+    </div>
+  )
+}
+
 export const Option =(props) => {
+  var options = props.obj.state.filteredOptions
+  var index = props.obj.state.currentOptionIndex
+  var isActive = (options[index] === props.option) ? "active" : "";
   return(
     <li
-      className={`option ${props.isActive}`}
+      className={`option ${isActive}`}
       onMouseEnter={() => props.obj.optionHover(props.option)}
       onClick={() => props.obj.optionClicked(props.option)}
       key={props.option}
@@ -23,21 +47,23 @@ export default class SingleSelect extends Component {
     var options = [];
     let data = props.values;
     var isGrouped = false;
-    var groupNames = [];
+    var groupData = [];
     if(typeof(_.first(data)) === "string") {
       var options = data;
     } else if (typeof(_.first(data)) === "object") {
       var options = _.map(data, 'name');
-      var groupNames = _.uniq(_.map(data, 'group'));
-      if((groupNames.length === 1 ) && (groupNames[0])) {
-        var isGrouped = true;
-      }
+      var groupData = _.groupBy(data, 'group');
+      var isGrouped = true;
+      var options = _.map(_.flatten(_.reverse(_.values(groupData))), 'name');
     }
 
 
     this.state = {
       options: options,
+      data: data,
       filteredOptions: options,
+      isGrouped: isGrouped,
+      groupData: groupData,
       isVisible: false,
       indictor: '\u25BC',
       displayProp: 'none',
@@ -62,7 +88,7 @@ export default class SingleSelect extends Component {
         this.hideDropdown()
         }
       } else {
-        if (this.refs["list"].contains(e.target)||this.refs["optionLabel"].contains(e.target)) {
+        if (this.refs["searchBox"].contains(e.target)) {
           this.showDropdown()
         } else {
           this.hideDropdown()
@@ -71,6 +97,7 @@ export default class SingleSelect extends Component {
   }
 
    showDropdown = (e) => {
+     this.myInp.focus()
      this.setState({
        displayProp: 'block',
        indictor: '\u25B2',
@@ -102,14 +129,17 @@ export default class SingleSelect extends Component {
    handleInputTextChange = e => {
      const input = e.target.value;
      let defaultOptions = this.state.options;
+     let isGrouped = (typeof(_.first(this.state.data)) === "object")
      let filteredOptions = _.flatten(defaultOptions).filter(function(option) { return  option.toLowerCase().includes(input.toLowerCase()); });
      if (input === "") {
        this.setState({
-         filteredOptions : defaultOptions
+         filteredOptions : defaultOptions,
+         isGrouped: isGrouped
        });
      } else {
        this.setState({
-         filteredOptions : filteredOptions
+         filteredOptions : filteredOptions,
+         isGrouped: false
        });
      }
    }
@@ -137,14 +167,6 @@ export default class SingleSelect extends Component {
          currentOptionIndex: index
        });
      }
-   } else if (e.key === " ") {
-     if(!isVisible) {
-      return null;
-    } else {
-      this.setState({
-        selectedOption: options[currentOptionIndex]
-      });
-    }
   } else if (e.key === "Enter") {
     if(!isVisible) {
      this.showDropdown()
@@ -169,23 +191,38 @@ export default class SingleSelect extends Component {
          <span className="indicator">{this.state.indictor}</span>
          </div>
 
-       <div className="dropdownContainer" style={{'position': 'absolute', 'left': '40%', 'top': '119', 'display': this.state.displayProp}}>
-         <div className="search" ref={"list"}>
-           <input className="searchBox" autoFocus="autofocus" onKeyDown={this.keyDownPressed} placeholder="Find Users/Groups..." onChange={this.handleInputTextChange}></input>
+       <div className="dropdownContainer" ref={"searchBox"} style={{'position': 'absolute', 'left': '40%', 'top': '119', 'display': this.state.displayProp}}>
+         <div className="search" ref={"searchBox"}>
+           <input ref={(ip) => this.myInp = ip} className="searchBox" autoFocus="autofocus" onKeyDown={this.keyDownPressed} placeholder="Find Users/Groups..." onChange={this.handleInputTextChange}></input>
            <span className="searchIcon">&#128269;</span>
          </div>
-         <ul className="list" ref={"optionLabel"}>
-           {
-             _.map(this.state.filteredOptions, option => {
-               let options = this.state.filteredOptions
-               let index = this.state.currentOptionIndex
-               let isActive = (options[index] === option) ? "active" : "";
-               return <Option isActive={isActive} option={option} obj={this}/>;
-             })
-           }
-        </ul>
+            {
+              (this.state.isGrouped) ? (
+                // _.map(this.state.groupData ,(values,groupName)=>{
+                //   return <Group name={groupName} values={values} obj={this}/>
+                // })
+                _.map(_.reverse(_.keys(this.state.groupData)) ,groupName=>{
+                 return <Group name={groupName} values={this.state.groupData[groupName]} obj={this}/>
+               })
+              ) : (
+                <ul className="list" ref={"optionLabel"}>
+                {
+                  _.map(this.state.filteredOptions, option => {
+                    return <Option option={option} obj={this}/>;
+                  })
+                }
+                </ul>
+              )
+            }
        </div>
        </div>
      );
    }
 }
+
+// _.filter(data, function(d) { return (_.keys(d).includes("group"))})
+
+// let options = this.state.filteredOptions
+// let index = this.state.currentOptionIndex
+// let isActive = (options[index] === option) ? "active" : "";
+// return <Option isActive={isActive} option={option} obj={this}/>;
