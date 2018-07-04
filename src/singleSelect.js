@@ -74,10 +74,17 @@ export default class SingleSelect extends Component {
 
   componentDidMount() {
     document.addEventListener("mousedown", this.dropdownListener);
+    document.addEventListener("mouseup", this.focusListener);
   }
+
+  componentDidUpdate() {
+    this.focusListener()
+  }
+
 
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.dropdownListener);
+    document.addEventListener("mouseup", this.focusListener);
   }
 
   dropdownListener = (e) => {
@@ -97,7 +104,6 @@ export default class SingleSelect extends Component {
   }
 
    showDropdown = (e) => {
-     this.myInp.focus()
      this.setState({
        displayProp: 'block',
        indictor: '\u25B2',
@@ -124,6 +130,14 @@ export default class SingleSelect extends Component {
      this.setState({
        currentOptionIndex: this.state.options.findIndex(e => e === option)
      });
+   }
+
+   focusListener = e => {
+     if (this.state.isVisible) {
+       document.getElementsByClassName("searchBox")[0].focus()
+     } else {
+       document.getElementsByClassName("firstButton")[0].focus()
+     }
    }
 
    handleInputTextChange = e => {
@@ -176,6 +190,7 @@ export default class SingleSelect extends Component {
      });
    }
   } else if (e.key === "Escape") {
+    document.getElementsByClassName("firstButton")[0].focus()
     this.hideDropdown()
   }
      }
@@ -193,7 +208,7 @@ export default class SingleSelect extends Component {
 
        <div className="dropdownContainer" ref={"searchBox"} style={{'position': 'absolute', 'left': '40%', 'top': '119', 'display': this.state.displayProp}}>
          <div className="search" ref={"searchBox"}>
-           <input ref={(ip) => this.myInp = ip} className="searchBox" autoFocus="autofocus" onKeyDown={this.keyDownPressed} placeholder="Find Users/Groups..." onChange={this.handleInputTextChange}></input>
+           <input ref='nameInputField' className="searchBox" onKeyDown={this.keyDownPressed} placeholder="Find Users/Groups..." onChange={this.handleInputTextChange}></input>
            <span className="searchIcon">&#128269;</span>
          </div>
             {
