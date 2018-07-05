@@ -75,16 +75,13 @@ export default class SingleSelect extends Component {
   componentDidMount() {
     document.addEventListener("mousedown", this.dropdownListener);
     document.addEventListener("mouseup", this.focusListener);
+    document.addEventListener("keyup", this.focusListener);
   }
-
-  componentDidUpdate() {
-    this.focusListener()
-  }
-
 
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.dropdownListener);
     document.addEventListener("mouseup", this.focusListener);
+    document.addEventListener("keyup", this.focusListener);
   }
 
   dropdownListener = (e) => {
@@ -190,7 +187,6 @@ export default class SingleSelect extends Component {
      });
    }
   } else if (e.key === "Escape") {
-    document.getElementsByClassName("firstButton")[0].focus()
     this.hideDropdown()
   }
      }
