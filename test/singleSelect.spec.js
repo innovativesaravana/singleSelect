@@ -73,13 +73,6 @@ describe('general features', () => {
       expect(wrapper.find('div.firstButton')).to.have.length(1);
   });
 
-  it('Clicking dropdown button shows a dropdown container' , () => {
-    let dropdownContainer = wrapper.find('div.dropdownContainer');
-    // expect(dropdownContainer.prop('style').opacity).to.eq(0);
-    wrapper.find('.firstButton').simulate('click');
-    // expect(dropdownContainer.prop('style').opacity).to.eq(100);
-  });
-
   it('should display given options name' , () => {
     let options = wrapper.find('li>label').map((op)=> op.text());
     expect(options).to.deep.equal(['Wilbert','Lily','Annalee','Lenita','Annetta','Alonso','Rory','Carola']);

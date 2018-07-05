@@ -85,14 +85,14 @@ export default class SingleSelect extends Component {
   }
 
   dropdownListener = (e) => {
-    if (this.refs["dropdownContainer"].contains(e.target)) {
+    if (document.getElementById("firstButton").contains(e.target)) {
       if (!this.state.isVisible) {
          this.showDropdown()
       } else {
         this.hideDropdown()
         }
       } else {
-        if (this.refs["searchBox"].contains(e.target)) {
+        if (document.getElementById("dropdownContainer").contains(e.target)) {
           this.showDropdown()
         } else {
           this.hideDropdown()
@@ -131,9 +131,9 @@ export default class SingleSelect extends Component {
 
    focusListener = e => {
      if (this.state.isVisible) {
-       document.getElementsByClassName("searchBox")[0].focus()
+       document.getElementById("searchBox").focus()
      } else {
-       document.getElementsByClassName("firstButton")[0].focus()
+        document.getElementById("firstButton").focus()
      }
    }
 
@@ -197,14 +197,14 @@ export default class SingleSelect extends Component {
        <div className="firstButton"
          tabIndex="0"
          onKeyDown={this.keyDownPressed}
-         ref={"dropdownContainer"}>
+         id="firstButton">
          <lablel className="buttonLabel">{this.state.selectedOption}</lablel>
          <span className="indicator">{this.state.indictor}</span>
          </div>
 
-       <div className="dropdownContainer" ref={"searchBox"} style={{'position': 'absolute', 'left': '40%', 'top': '119', 'display': this.state.displayProp}}>
-         <div className="search" ref={"searchBox"}>
-           <input ref='nameInputField' className="searchBox" onKeyDown={this.keyDownPressed} placeholder="Find Users/Groups..." onChange={this.handleInputTextChange}></input>
+       <div className="dropdownContainer" id="dropdownContainer" style={{'position': 'absolute', 'left': '40%', 'top': '119', 'display': this.state.displayProp}}>
+         <div className="search" >
+           <input className="searchBox" id="searchBox" onKeyDown={this.keyDownPressed} placeholder="Find Users/Groups..." onChange={this.handleInputTextChange}></input>
            <span className="searchIcon">&#128269;</span>
          </div>
             {
@@ -216,7 +216,7 @@ export default class SingleSelect extends Component {
                  return <Group name={groupName} values={this.state.groupData[groupName]} obj={this}/>
                })
               ) : (
-                <ul className="list" ref={"optionLabel"}>
+                <ul className="list">
                 {
                   _.map(this.state.filteredOptions, option => {
                     return <Option option={option} obj={this}/>;
