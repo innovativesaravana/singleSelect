@@ -218,9 +218,6 @@ export default class SingleSelect extends Component {
          <div className="scrollContainer">
             {
               (this.state.isGrouped) ? (
-                // _.map(this.state.groupData ,(values,groupName)=>{
-                //   return <Group name={groupName} values={values} obj={this}/>
-                // })
                 _.map(_.reverse(_.keys(this.state.groupData)) ,groupName=>{
                  return <Group name={groupName} values={this.state.groupData[groupName]} obj={this}/>
                })
@@ -240,10 +237,3 @@ export default class SingleSelect extends Component {
      );
    }
 }
-
-// _.filter(data, function(d) { return (_.keys(d).includes("group"))})
-
-// let options = this.state.filteredOptions
-// let index = this.state.currentOptionIndex
-// let isActive = (options[index] === option) ? "active" : "";
-// return <Option isActive={isActive} option={option} obj={this}/>;
