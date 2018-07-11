@@ -463,6 +463,28 @@ describe('group input keyboard functionalities', () => {
 
 });
 
+describe('icon test', () => {
+  let values = [{name: 'Lily', id: 1, group: 'suggestedUsers'}, {name: 'Annalee', id: 2, group: 'suggestedUsers'},
+    {name: 'Carola', id: 3, group: 'suggestedGroups',icon:"https://robohash.org/debitislaudantiumin.bmp?size=50x50&set=set1"}];
+
+  let wrapper = mount(
+    <SingleSelect values={values}/>
+  );
+
+  it('should show a given icon' , () => {
+    let option = wrapper.find('li').filterWhere(n => n.text() == 'Lily');
+    let icon = option.find('img')
+    expect(icon.prop("src")).to.eq('https://s3.amazonaws.com/rapidapi-prod-fe_static/images/unknown_user.png');
+
+  });
+
+  it('should show a default icon when icon input not given' , () => {
+    let option = wrapper.find('li').filterWhere(n => n.text() == 'Carola');
+    let icon = option.find('img')
+    expect(icon.prop("src")).to.eq('https://robohash.org/debitislaudantiumin.bmp?size=50x50&set=set1');
+  });
+
+});
 
 
 // update css

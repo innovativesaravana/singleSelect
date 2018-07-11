@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 export const Group =(props) => {
   return(
-    <div>
+    <div className={`group ${props.name}`}>
     {
       (props.name === "undefined") ? (
         false
@@ -26,6 +26,8 @@ export const Option =(props) => {
   var options = props.obj.state.filteredOptions
   var index = props.obj.state.currentOptionIndex
   var isActive = (options[index] === props.option) ? "active" : "";
+  var default_icon = "https://s3.amazonaws.com/rapidapi-prod-fe_static/images/unknown_user.png"
+  var img = (_.isNil(props.obj.state.imgHash[props.option])) ? default_icon : props.obj.state.imgHash[props.option];
   return(
     <li
       className={`option ${isActive}`}
@@ -33,6 +35,7 @@ export const Option =(props) => {
       onClick={() => props.obj.optionClicked(props.option)}
       key={props.option}
     >
+      <img style={{'height': '10%', 'width': '10%', 'borderRadius': '50%', 'marginTop': '4px'}}src={img} alt="Avatar"/>
       <label className="optionLabel">
         {props.option}
       </label>
@@ -48,6 +51,7 @@ export default class SingleSelect extends Component {
     let data = props.values;
     var isGrouped = false;
     var groupData = [];
+    var imgHash= {};
     if(typeof(_.first(data)) === "string") {
       var options = data;
     } else if (typeof(_.first(data)) === "object") {
@@ -55,6 +59,8 @@ export default class SingleSelect extends Component {
       var groupData = _.groupBy(data, 'group');
       var isGrouped = true;
       var options = _.map(_.flatten(_.reverse(_.values(groupData))), 'name');
+      var img = _.map(_.flatten(_.reverse(_.values(groupData))), 'icon');
+      var imgHash = _.zipObject(options, img)
     }
 
 
@@ -68,7 +74,8 @@ export default class SingleSelect extends Component {
       indictor: '\u25BC',
       displayProp: 'none',
       currentOptionIndex: 0,
-      selectedOption: "Select a name"
+      selectedOption: "Select a name",
+      imgHash: imgHash
     };
   }
 
@@ -132,6 +139,7 @@ export default class SingleSelect extends Component {
    focusListener = e => {
      if (this.state.isVisible) {
        document.getElementById("searchBox").focus()
+       document.getElementsByClassName("scrollContainer")[0].scrollTop = (this.state.currentOptionIndex*10)
      } else {
         document.getElementById("firstButton").focus()
      }
@@ -207,6 +215,7 @@ export default class SingleSelect extends Component {
            <input className="searchBox" id="searchBox" onKeyDown={this.keyDownPressed} placeholder="Find Users/Groups..." onChange={this.handleInputTextChange}></input>
            <span className="searchIcon">&#128269;</span>
          </div>
+         <div className="scrollContainer">
             {
               (this.state.isGrouped) ? (
                 // _.map(this.state.groupData ,(values,groupName)=>{
@@ -225,6 +234,7 @@ export default class SingleSelect extends Component {
                 </ul>
               )
             }
+       </div>
        </div>
        </div>
      );
