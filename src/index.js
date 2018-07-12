@@ -1,11 +1,81 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import SingleSelect from './singleSelect';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import SingleSelect from "./singleSelect";
 {
-  let values = [{name: 'Vasanth', id: 1, group: 'Suggested Users', icon:"https://avatar-cdn.atlassian.com/99b5ead47d35150b9df92ce56b649fb2?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26ownerId%3Dvasanth%26avatarId%3D11601%26noRedirect%3Dtrue"},{name: 'Hari', id: 2, group: 'Suggested Users', icon:"https://avatar-cdn.atlassian.com/32411a9bb62fb2c10c2a032558b72148?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F32411a9bb62fb2c10c2a032558b72148%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue"},
-    {name: 'QA', id: 3, group: 'Suggested Groups', icon:"https://avatar-cdn.atlassian.com/37a6259cc0c1dae299a7866489dff0bd?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26avatarId%3D10123%26noRedirect%3Dtrue"}, {name: 'Lily', id: 4, icon:"https://avatar-cdn.atlassian.com/37a6259cc0c1dae299a7866489dff0bd?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26avatarId%3D10123%26noRedirect%3Dtrue"}, {name: 'Users', id: 5, group: 'Suggested Groups', icon:"https://avatar-cdn.atlassian.com/37a6259cc0c1dae299a7866489dff0bd?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26avatarId%3D10123%26noRedirect%3Dtrue"},
-    {name: 'Support', id: 6, group: 'Suggested Groups',icon:"https://robohash.org/debitislaudantiumin.bmp?size=50x50&set=set1"}, {name: 'Crazy', id: 7, icon:"https://avatar-cdn.atlassian.com/50aae47a2f80ba764039e857a04d6779?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26avatarId%3D11221%26noRedirect%3Dtrue"}, {name: 'Analysis', id: 8, group: 'Suggested Groups'},{name: 'Sarav', id: 9, group: 'Suggested Users', icon:"https://avatar-cdn.atlassian.com/50aae47a2f80ba764039e857a04d6779?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26avatarId%3D11221%26noRedirect%3Dtrue"}, {name: 'Banu', id: 10, group: 'Suggested Users', icon:"https://avatar-cdn.atlassian.com/5574a4613b611679b771bf782b0d4f2b?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F5574a4613b611679b771bf782b0d4f2b%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue"}, {name: 'Nagma', id: 11, group: 'Suggested Users', icon:"https://avatar-cdn.atlassian.com/856a1c46b5a5972c993093358a277933?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F856a1c46b5a5972c993093358a277933%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue"}];
+  let values = [
+    {
+      name: "Vasanth",
+      id: 1,
+      group: "Suggested Users",
+      icon:
+        "https://avatar-cdn.atlassian.com/99b5ead47d35150b9df92ce56b649fb2?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26ownerId%3Dvasanth%26avatarId%3D11601%26noRedirect%3Dtrue"
+    },
+    {
+      name: "Hari",
+      id: 2,
+      group: "Suggested Users",
+      icon:
+        "https://avatar-cdn.atlassian.com/32411a9bb62fb2c10c2a032558b72148?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F32411a9bb62fb2c10c2a032558b72148%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue"
+    },
+    {
+      name: "QA",
+      id: 3,
+      group: "Suggested Groups",
+      icon:
+        "https://avatar-cdn.atlassian.com/37a6259cc0c1dae299a7866489dff0bd?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26avatarId%3D10123%26noRedirect%3Dtrue"
+    },
+    {
+      name: "Lily",
+      id: 4,
+      icon:
+        "https://avatar-cdn.atlassian.com/37a6259cc0c1dae299a7866489dff0bd?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26avatarId%3D10123%26noRedirect%3Dtrue"
+    },
+    {
+      name: "Users",
+      id: 5,
+      group: "Suggested Groups",
+      icon:
+        "https://avatar-cdn.atlassian.com/37a6259cc0c1dae299a7866489dff0bd?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26avatarId%3D10123%26noRedirect%3Dtrue"
+    },
+    {
+      name: "Support",
+      id: 6,
+      group: "Suggested Groups",
+      icon: "https://robohash.org/debitislaudantiumin.bmp?size=50x50&set=set1"
+    },
+    {
+      name: "Crazy",
+      id: 7,
+      icon:
+        "https://avatar-cdn.atlassian.com/50aae47a2f80ba764039e857a04d6779?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26avatarId%3D11221%26noRedirect%3Dtrue"
+    },
+    { name: "Analysis", id: 8, group: "Suggested Groups" },
+    {
+      name: "Sarav",
+      id: 9,
+      group: "Suggested Users",
+      icon:
+        "https://avatar-cdn.atlassian.com/50aae47a2f80ba764039e857a04d6779?s=16&d=https%3A%2F%2Flistenfirstmedia.atlassian.net%2Fsecure%2Fuseravatar%3Fsize%3Dxsmall%26avatarId%3D11221%26noRedirect%3Dtrue"
+    },
+    {
+      name: "Banu",
+      id: 10,
+      group: "Suggested Users",
+      icon:
+        "https://avatar-cdn.atlassian.com/5574a4613b611679b771bf782b0d4f2b?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F5574a4613b611679b771bf782b0d4f2b%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue"
+    },
+    {
+      name: "Nagma",
+      id: 11,
+      group: "Suggested Users",
+      icon:
+        "https://avatar-cdn.atlassian.com/856a1c46b5a5972c993093358a277933?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F856a1c46b5a5972c993093358a277933%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue"
+    }
+  ];
 
-  ReactDOM.render(<SingleSelect values={values}/>, document.getElementById('root'));
+  ReactDOM.render(
+    <SingleSelect values={values} />,
+    document.getElementById("root")
+  );
 }

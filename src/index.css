@@ -29,7 +29,7 @@ div.group {
   margin-bottom: -15px;
 }
 
-.scrollContainer{
+.scrollContainer {
   max-height: 270px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -43,9 +43,8 @@ div.group {
   position: relative;
   width: 188px;
   border-radius: 5px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
-
 
 .searchBox:focus {
   outline-color: transparent;
@@ -74,12 +73,12 @@ div.group {
   cursor: pointer;
 }
 
-label{
+label {
   margin-left: 10px;
 }
 
 span {
-  float:right;
+  float: right;
   margin-right: 10px;
   margin-top: 2.5px;
   font-size: 13px;
@@ -109,12 +108,12 @@ span {
   cursor: pointer;
 }
 
-.firstButton:focus{
-  outline-color: skyblue
+.firstButton:focus {
+  outline-color: skyblue;
 }
 
 li:focus,
-li.active{
+li.active {
   background-color: #b4b4b4;
   color: #fff;
 }
