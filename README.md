@@ -1,7 +1,8 @@
-Hi Guys, This is a single select react component similar to the Jira filter dropdown.
+This is a single select react component similar to the Jira filter dropdown.
 
 Pre-reqirement
     1.Node (sudo apt-get install nodejs)
+
 project setup
     1. git clone git@github.com:innovativesaravana/singleSelect.git
     2. cd single-select/
