@@ -4,12 +4,12 @@ Pre-reqirement
     1.Node (sudo apt-get install nodejs)
 
 project setup
-    1. git clone git@github.com:innovativesaravana/singleSelect.git
-    2. cd single-select/
-    3. npm install
-    4. npm start
+    # git clone git@github.com:innovativesaravana/singleSelect.git
+    # cd single-select/
+    # npm install
+    # npm start
     # To run test
-    5. npm test
+    # npm test
 
 Implemented features:
 
