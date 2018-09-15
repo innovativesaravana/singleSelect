@@ -75,6 +75,13 @@ div.group {
   border-radius: 2px;
 }
 
+img {
+  height: 10%;
+  width: 10%;
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
 .searchIcon {
   float: right;
   margin-top: 4px;

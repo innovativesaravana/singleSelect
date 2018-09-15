@@ -122,10 +122,10 @@ describe("Keyboard functionalities", () => {
   it("pressing enter over the option should select", () => {
     let wrapper = mount(<SingleSelect values={values} />);
     wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
-    expect(wrapper.state().selectedOption).to.eq("Select a name"); // default text
+    expect(_.isEmpty(wrapper.state().selectedOption)).to.eq(true);
     wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
     expect(wrapper.find("li.active").text()).to.eq("Lily");
-    expect(wrapper.state().selectedOption).to.eq("Select a name"); // default text
+    expect(_.isEmpty(wrapper.state().selectedOption)).to.eq(true);
     wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
     expect(wrapper.state().selectedOption).to.eq("Lily");
   });
@@ -278,10 +278,10 @@ describe("object input keyboard functionalities", () => {
   it("pressing enter over the option should select", () => {
     let wrapper = mount(<SingleSelect values={values} />);
     wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
-    expect(wrapper.state().selectedOption).to.eq("Select a name"); // default text
+    expect(_.isEmpty(wrapper.state().selectedOption)).to.eq(true);
     wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
     expect(wrapper.find("li.active").text()).to.eq("Annalee");
-    expect(wrapper.state().selectedOption).to.eq("Select a name"); // default text
+    expect(_.isEmpty(wrapper.state().selectedOption)).to.eq(true);
     wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
     expect(wrapper.state().selectedOption).to.eq("Annalee");
   });
@@ -471,10 +471,10 @@ describe("group input keyboard functionalities", () => {
   it("pressing enter over the option should select", () => {
     let wrapper = mount(<SingleSelect values={values} />);
     wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
-    expect(wrapper.state().selectedOption).to.eq("Select a name"); // default text
+    expect(_.isEmpty(wrapper.state().selectedOption)).to.eq(true);
     wrapper.find(".firstButton").simulate("keyDown", { key: "ArrowDown" });
     expect(wrapper.find("li.active").text()).to.eq("Crazy");
-    expect(wrapper.state().selectedOption).to.eq("Select a name"); // default text
+    expect(_.isEmpty(wrapper.state().selectedOption)).to.eq(true);
     wrapper.find(".firstButton").simulate("keyDown", { key: "Enter" });
     expect(wrapper.state().selectedOption).to.eq("Crazy");
   });

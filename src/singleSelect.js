@@ -2,12 +2,20 @@ import React, { Component } from "react";
 import _ from "lodash";
 
 export const Group = props => {
+  const {name,values,options,groupOptions,index,imgHash,optionHover,optionClicked} = props;
   return (
-    <div className={`group ${props.name}`}>
-      {props.name === "undefined" ? false : <h5>{props.name}</h5>}
+    <div className={`group ${name}`}>
+      {((name !== "undefined")&&<h5>{name}</h5>)}
       <ul className="list">
-        {_.map(_.map(props.values, "name"), option => {
-          return <Option option={option} obj={props.obj} />;
+        {_.map(groupOptions, option => {
+          return <Option
+          option={option}
+          options={options}
+          index={index}
+          imgHash={imgHash}
+          optionHover={optionHover}
+          optionClicked={optionClicked}
+          />;
         })}
       </ul>
     </div>
@@ -15,32 +23,25 @@ export const Group = props => {
 };
 
 export const Option = props => {
-  var options = props.obj.state.filteredOptions;
-  var index = props.obj.state.currentOptionIndex;
-  var isActive = options[index] === props.option ? "active" : "";
-  var default_icon =
+  const {option,options,index,imgHash,optionHover,optionClicked} = props;
+  const isActive = options[index] === option ? "active" : "";
+  const default_icon =
     "https://s3.amazonaws.com/rapidapi-prod-fe_static/images/unknown_user.png";
-  var img = _.isNil(props.obj.state.imgHash[props.option])
+  const img = _.isNil(imgHash[option])
     ? default_icon
-    : props.obj.state.imgHash[props.option];
+    : imgHash[option];
   return (
     <li
       className={`option ${isActive}`}
-      onMouseEnter={() => props.obj.optionHover(props.option)}
-      onClick={() => props.obj.optionClicked(props.option)}
-      key={props.option}
+      onMouseEnter={() => optionHover(option)}
+      onClick={() => optionClicked(option)}
+      key={option}
     >
       <img
-        style={{
-          height: "10%",
-          width: "10%",
-          borderRadius: "50%",
-          marginTop: "4px"
-        }}
         src={img}
         alt="Avatar"
       />
-      <label className="optionLabel">{props.option}</label>
+      <label className="optionLabel">{option}</label>
     </li>
   );
 };
@@ -48,7 +49,6 @@ export const Option = props => {
 export default class SingleSelect extends Component {
   constructor(props) {
     super(props);
-
     const data = props.values;
     this.state = {
       ...this.transformInputData(data),
@@ -57,20 +57,21 @@ export default class SingleSelect extends Component {
       indictor: "\u25BC",
       currentOptionIndex: 0,
       containerClassName: "",
-      selectedOption: "Select a name",
+      selectedOption: [],
     };
   }
 
   transformInputData = data => {
-    if (typeof _.first(data) === "string") {
+    if (_.every( data, x => { return typeof x === "string"})) {
       return {
         "options": data,
         "filteredOptions": data,
         "isGrouped": false,
         "groupData": [],
         "imgHash": {},
+        "groupsName": [],
       };
-    } else if (typeof _.first(data) === "object") {
+    } else if (_.every( data, x => { return typeof x === "object"})) {
       const groupData = _.groupBy(data, "group");
       const options = _.chain(groupData)
         .values()
@@ -85,14 +86,18 @@ export default class SingleSelect extends Component {
         .map("icon")
         .value();
       const imgHash = _.zipObject(options, img);
+      const groupsName = _.reverse(_.keys(groupData))
       return {
         "options": options,
         "filteredOptions": options,
         "isGrouped": true,
         "groupData": groupData,
         "imgHash": imgHash,
+        "groupsName": groupsName,
       };
-    }
+    } else {
+      alert("invalid input data given")
+    };
   };
 
   componentDidMount() {
@@ -164,10 +169,10 @@ export default class SingleSelect extends Component {
 
   handleInputTextChange = e => {
     const input = e.target.value;
-    let defaultOptions = this.state.options;
-    let isGrouped = typeof _.first(this.state.data) === "object";
-    let filteredOptions = _.flatten(defaultOptions).filter(function(option) {
-      return option.toLowerCase().includes(input.toLowerCase());
+    const defaultOptions = this.state.options;
+    const isGrouped = typeof _.first(this.state.data) === "object"; //for chanege display view while filtering
+    const filteredOptions = _.flatten(defaultOptions).filter(function(option) {
+      return _.includes(_.toLower(option),(_.toLower(input)));
     });
     if (input === "") {
       this.setState({
@@ -177,16 +182,16 @@ export default class SingleSelect extends Component {
     } else {
       this.setState({
         filteredOptions: filteredOptions,
-        isGrouped: false
+        isGrouped: false  //to change list view
       });
     }
   };
 
   keyDownPressed = e => {
-    let options = this.state.filteredOptions;
-    let options_length = options.length;
-    let isVisible = this.state.isVisible;
-    let currentOptionIndex = this.state.currentOptionIndex;
+    const options = this.state.filteredOptions;
+    const options_length = options.length;
+    const isVisible = this.state.isVisible;
+    const currentOptionIndex = this.state.currentOptionIndex;
     if (e.key === "ArrowDown") {
       if (!isVisible) {
         this.showDropdown();
@@ -222,6 +227,11 @@ export default class SingleSelect extends Component {
   };
 
   render() {
+    const filteredOptions = this.state.filteredOptions;
+    const currentOptionIndex = this.state.currentOptionIndex;
+    const imgHash = this.state.imgHash;
+    const optionHover = this.optionHover;
+    const optionClicked = this.optionClicked;
     return (
       <div>
         <div
@@ -230,7 +240,7 @@ export default class SingleSelect extends Component {
           onKeyDown={this.keyDownPressed}
           id="firstButton"
         >
-          <lablel className="buttonLabel">{this.state.selectedOption}</lablel>
+          <lablel className="buttonLabel">{_.isEmpty(this.state.selectedOption) ? "Select a name" : this.state.selectedOption}</lablel>
           <span className="indicator">{this.state.indictor}</span>
         </div>
 
@@ -250,19 +260,33 @@ export default class SingleSelect extends Component {
           </div>
           <div className="scrollContainer">
             {this.state.isGrouped ? (
-              _.map(_.reverse(_.keys(this.state.groupData)), groupName => {
+              _.map(this.state.groupsName, groupName => {
+                const groupData = this.state.groupData[groupName];
+                const groupOptions = _.map(groupData,"name")
                 return (
                   <Group
                     name={groupName}
-                    values={this.state.groupData[groupName]}
-                    obj={this}
+                    values={groupData}
+                    options={filteredOptions}
+                    index={currentOptionIndex}
+                    imgHash={imgHash}
+                    optionHover={optionHover}
+                    optionClicked={optionClicked}
+                    groupOptions={groupOptions}
                   />
                 );
               })
             ) : (
               <ul className="list">
                 {_.map(this.state.filteredOptions, option => {
-                  return <Option option={option} obj={this} />;
+                  return <Option
+                  option={option}
+                  options={filteredOptions}
+                  index={currentOptionIndex}
+                  imgHash={imgHash}
+                  optionHover={optionHover}
+                  optionClicked={optionClicked}
+                />;
                 })}
               </ul>
             )}
