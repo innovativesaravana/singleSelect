@@ -2,20 +2,31 @@ import React, { Component } from "react";
 import _ from "lodash";
 
 export const Group = props => {
-  const {name,values,options,groupOptions,index,imgHash,optionHover,optionClicked} = props;
+  const {
+    name,
+    values,
+    options,
+    groupOptions,
+    index,
+    imgHash,
+    optionHover,
+    optionClicked
+  } = props;
   return (
     <div className={`group ${name}`}>
-      {((name !== "undefined")&&<h5>{name}</h5>)}
+      {name !== "undefined" && <h5>{name}</h5>}
       <ul className="list">
         {_.map(groupOptions, option => {
-          return <Option
-          option={option}
-          options={options}
-          index={index}
-          imgHash={imgHash}
-          optionHover={optionHover}
-          optionClicked={optionClicked}
-          />;
+          return (
+            <Option
+              option={option}
+              options={options}
+              index={index}
+              imgHash={imgHash}
+              optionHover={optionHover}
+              optionClicked={optionClicked}
+            />
+          );
         })}
       </ul>
     </div>
@@ -23,13 +34,11 @@ export const Group = props => {
 };
 
 export const Option = props => {
-  const {option,options,index,imgHash,optionHover,optionClicked} = props;
+  const { option, options, index, imgHash, optionHover, optionClicked } = props;
   const isActive = options[index] === option ? "active" : "";
   const default_icon =
     "https://s3.amazonaws.com/rapidapi-prod-fe_static/images/unknown_user.png";
-  const img = _.isNil(imgHash[option])
-    ? default_icon
-    : imgHash[option];
+  const img = _.isNil(imgHash[option]) ? default_icon : imgHash[option];
   return (
     <li
       className={`option ${isActive}`}
@@ -37,10 +46,7 @@ export const Option = props => {
       onClick={() => optionClicked(option)}
       key={option}
     >
-      <img
-        src={img}
-        alt="Avatar"
-      />
+      <img src={img} alt="Avatar" />
       <label className="optionLabel">{option}</label>
     </li>
   );
@@ -57,21 +63,29 @@ export default class SingleSelect extends Component {
       indictor: "\u25BC",
       currentOptionIndex: 0,
       containerClassName: "",
-      selectedOption: [],
+      selectedOption: []
     };
   }
 
   transformInputData = data => {
-    if (_.every( data, x => { return typeof x === "string"})) {
+    if (
+      _.every(data, x => {
+        return typeof x === "string";
+      })
+    ) {
       return {
-        "options": data,
-        "filteredOptions": data,
-        "isGrouped": false,
-        "groupData": [],
-        "imgHash": {},
-        "groupsName": [],
+        options: data,
+        filteredOptions: data,
+        isGrouped: false,
+        groupData: [],
+        imgHash: {},
+        groupsName: []
       };
-    } else if (_.every( data, x => { return typeof x === "object"})) {
+    } else if (
+      _.every(data, x => {
+        return typeof x === "object";
+      })
+    ) {
       const groupData = _.groupBy(data, "group");
       const options = _.chain(groupData)
         .values()
@@ -86,18 +100,18 @@ export default class SingleSelect extends Component {
         .map("icon")
         .value();
       const imgHash = _.zipObject(options, img);
-      const groupsName = _.reverse(_.keys(groupData))
+      const groupsName = _.reverse(_.keys(groupData));
       return {
-        "options": options,
-        "filteredOptions": options,
-        "isGrouped": true,
-        "groupData": groupData,
-        "imgHash": imgHash,
-        "groupsName": groupsName,
+        options: options,
+        filteredOptions: options,
+        isGrouped: true,
+        groupData: groupData,
+        imgHash: imgHash,
+        groupsName: groupsName
       };
     } else {
-      alert("invalid input data given")
-    };
+      alert("invalid input data given");
+    }
   };
 
   componentDidMount() {
@@ -172,7 +186,7 @@ export default class SingleSelect extends Component {
     const defaultOptions = this.state.options;
     const isGrouped = typeof _.first(this.state.data) === "object"; //for chanege display view while filtering
     const filteredOptions = _.flatten(defaultOptions).filter(function(option) {
-      return _.includes(_.toLower(option),(_.toLower(input)));
+      return _.includes(_.toLower(option), _.toLower(input));
     });
     if (input === "") {
       this.setState({
@@ -182,7 +196,7 @@ export default class SingleSelect extends Component {
     } else {
       this.setState({
         filteredOptions: filteredOptions,
-        isGrouped: false  //to change list view
+        isGrouped: false //to change list view
       });
     }
   };
@@ -240,7 +254,11 @@ export default class SingleSelect extends Component {
           onKeyDown={this.keyDownPressed}
           id="firstButton"
         >
-          <lablel className="buttonLabel">{_.isEmpty(this.state.selectedOption) ? "Select a name" : this.state.selectedOption}</lablel>
+          <lablel className="buttonLabel">
+            {_.isEmpty(this.state.selectedOption)
+              ? "Select a name"
+              : this.state.selectedOption}
+          </lablel>
           <span className="indicator">{this.state.indictor}</span>
         </div>
 
@@ -262,7 +280,7 @@ export default class SingleSelect extends Component {
             {this.state.isGrouped ? (
               _.map(this.state.groupsName, groupName => {
                 const groupData = this.state.groupData[groupName];
-                const groupOptions = _.map(groupData,"name")
+                const groupOptions = _.map(groupData, "name");
                 return (
                   <Group
                     name={groupName}
@@ -279,14 +297,16 @@ export default class SingleSelect extends Component {
             ) : (
               <ul className="list">
                 {_.map(this.state.filteredOptions, option => {
-                  return <Option
-                  option={option}
-                  options={filteredOptions}
-                  index={currentOptionIndex}
-                  imgHash={imgHash}
-                  optionHover={optionHover}
-                  optionClicked={optionClicked}
-                />;
+                  return (
+                    <Option
+                      option={option}
+                      options={filteredOptions}
+                      index={currentOptionIndex}
+                      imgHash={imgHash}
+                      optionHover={optionHover}
+                      optionClicked={optionClicked}
+                    />
+                  );
                 })}
               </ul>
             )}
