@@ -38,12 +38,20 @@ div.group {
 
 .dropdownContainer {
   background-color: white;
+  padding-top: 0.4%;
+  display: none;
+  position: absolute;
+  left: 40%;
   cursor: pointer;
   margin-top: 5px;
   position: relative;
   width: 188px;
   border-radius: 5px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.dropdownContainer.visible {
+  display: block;
 }
 
 .searchBox:focus {
@@ -58,12 +66,12 @@ div.group {
 
 .search {
   margin-left: 5px;
+  margin-top: 5px;
   width: 160px;
   border-style: solid;
   border-color: black;
   border-width: 1px;
-  margin-top: 8px;
-  display: black;
+  display: block;
   border-radius: 2px;
 }
 

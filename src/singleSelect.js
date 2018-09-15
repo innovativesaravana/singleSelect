@@ -48,36 +48,52 @@ export const Option = props => {
 export default class SingleSelect extends Component {
   constructor(props) {
     super(props);
-    var options = [];
-    let data = props.values;
-    var isGrouped = false;
-    var groupData = [];
-    var imgHash = {};
-    if (typeof _.first(data) === "string") {
-      var options = data;
-    } else if (typeof _.first(data) === "object") {
-      var options = _.map(data, "name");
-      var groupData = _.groupBy(data, "group");
-      var isGrouped = true;
-      var options = _.map(_.flatten(_.reverse(_.values(groupData))), "name");
-      var img = _.map(_.flatten(_.reverse(_.values(groupData))), "icon");
-      var imgHash = _.zipObject(options, img);
-    }
 
+    const data = props.values;
     this.state = {
-      options: options,
+      ...this.transformInputData(data),
       data: data,
-      filteredOptions: options,
-      isGrouped: isGrouped,
-      groupData: groupData,
       isVisible: false,
       indictor: "\u25BC",
-      displayProp: "none",
       currentOptionIndex: 0,
+      containerClassName: "",
       selectedOption: "Select a name",
-      imgHash: imgHash
     };
   }
+
+  transformInputData = data => {
+    if (typeof _.first(data) === "string") {
+      return {
+        "options": data,
+        "filteredOptions": data,
+        "isGrouped": false,
+        "groupData": [],
+        "imgHash": {},
+      };
+    } else if (typeof _.first(data) === "object") {
+      const groupData = _.groupBy(data, "group");
+      const options = _.chain(groupData)
+        .values()
+        .reverse()
+        .flatten()
+        .map("name")
+        .value();
+      const img = _.chain(groupData)
+        .values()
+        .reverse()
+        .flatten()
+        .map("icon")
+        .value();
+      const imgHash = _.zipObject(options, img);
+      return {
+        "options": options,
+        "filteredOptions": options,
+        "isGrouped": true,
+        "groupData": groupData,
+        "imgHash": imgHash,
+      };
+    }
+  };
 
   componentDidMount() {
     document.addEventListener("mousedown", this.dropdownListener);
@@ -109,7 +125,7 @@ export default class SingleSelect extends Component {
 
   showDropdown = e => {
     this.setState({
-      displayProp: "block",
+      containerClassName: "visible",
       indictor: "\u25B2",
       isVisible: true
     });
@@ -117,7 +133,7 @@ export default class SingleSelect extends Component {
 
   hideDropdown = e => {
     this.setState({
-      displayProp: "none",
+      containerClassName: "",
       indictor: "\u25BC",
       isVisible: false
     });
@@ -219,21 +235,15 @@ export default class SingleSelect extends Component {
         </div>
 
         <div
-          className="dropdownContainer"
+          className={`dropdownContainer ${this.state.containerClassName}`}
           id="dropdownContainer"
-          style={{
-            position: "absolute",
-            left: "40%",
-            top: "119",
-            display: this.state.displayProp
-          }}
         >
           <div className="search">
             <input
               className="searchBox"
               id="searchBox"
               onKeyDown={this.keyDownPressed}
-              placeholder="Find Users/Groups..."
+              placeholder="Type text to filter"
               onChange={this.handleInputTextChange}
             />
             <span className="searchIcon">&#128269;</span>
